@@ -10,8 +10,6 @@ namespace Basket.API.GrpcServices
         {
             _discountProtoService = discountProtoService ?? throw new ArgumentNullException(nameof(discountProtoService));
         }
-         
-
 
         public async Task<CouponModel> GetDiscount(string productName)
         {
