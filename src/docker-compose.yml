@@ -42,6 +42,12 @@ services:
       context: .
       dockerfile: Services/Ordering/Ordering.API/Dockerfile
 
+  ocelotapigetway:
+    image: ${DOCKER_REGISTRY-}ocelotapigetway
+    build:
+      context: .
+      dockerfile: ApiGetways/OcelotApiGetway/Dockerfile
+
 volumes:
   mongo_data:
   portainer_data:
@@ -49,5 +55,6 @@ volumes:
   pgadmin_data:
 
    
+
 
 

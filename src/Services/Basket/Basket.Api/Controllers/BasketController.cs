@@ -19,13 +19,15 @@ namespace Basket.API.Controllers
         private readonly DiscountGrpcService _discountGrpcService;
         private readonly IMapper _mapper;
         private readonly IPublishEndpoint _publishEndpoint;
+        private readonly ILogger<BasketController> _logger;
 
-        public BasketController(IBasketRepository basketRepository, DiscountGrpcService discountGrpcService, IMapper mapper, IPublishEndpoint publishEndpoint)
+        public BasketController(IBasketRepository basketRepository, DiscountGrpcService discountGrpcService, IMapper mapper, IPublishEndpoint publishEndpoint, ILogger<BasketController> logger)
         {
             _basketRepository = basketRepository ?? throw new ArgumentNullException(nameof(basketRepository));
             _discountGrpcService = discountGrpcService ?? throw new ArgumentNullException(nameof(discountGrpcService));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _publishEndpoint = publishEndpoint;
+            _logger = logger;
         }
 
         [HttpGet("{userName}", Name ="GetBasket")]
@@ -45,6 +47,7 @@ namespace Basket.API.Controllers
             {
                 var coupon = await _discountGrpcService.GetDiscount(item.ProductName);
                 item.Price -= coupon.Amount;
+                _logger.LogInformation("Item price discounted to {ItemPrice}", item.Price);
             }
 
             return Ok(await _basketRepository.UpdateBasket(basket));
@@ -77,10 +80,7 @@ namespace Basket.API.Controllers
             }
 
             var eventMessage = _mapper.Map<BasketChechkoutEvent>(basketCheckout);
-            eventMessage.TotalPrice = basket.TotalPrice;
             await _publishEndpoint.Publish(eventMessage);
-
-
 
             await _basketRepository.DeleteBasket(basketCheckout.UserName);
 
