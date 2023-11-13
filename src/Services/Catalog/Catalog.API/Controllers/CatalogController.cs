@@ -1,5 +1,6 @@
 ﻿using Catalog.API.Entities;
 using Catalog.API.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -20,6 +21,7 @@ namespace Catalog.API.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<Product>), (int)HttpStatusCode.OK)]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
             IEnumerable<Product> products  = await _repository.GetProducts();
@@ -29,6 +31,7 @@ namespace Catalog.API.Controllers
         [HttpGet("{id:length(24)}", Name="GetProduct")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<Product>> GetProductById(string id)
         {
             Product product = await _repository.GetProduct(id);

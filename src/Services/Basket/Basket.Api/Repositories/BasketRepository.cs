@@ -32,5 +32,6 @@ namespace Basket.API.Repositories
             await _redisCache.SetStringAsync(basket.UserName, JsonConvert.SerializeObject(basket));
             return await GetBasket(basket.UserName);
         }
+
     }
 }

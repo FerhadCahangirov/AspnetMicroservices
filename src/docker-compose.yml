@@ -48,6 +48,18 @@ services:
       context: .
       dockerfile: ApiGetways/OcelotApiGetway/Dockerfile
 
+  shopping.aggregator:
+    image: ${DOCKER_REGISTRY-}shoppingaggregator
+    build:
+      context: .
+      dockerfile: ApiGetways/Shopping.Aggregator/Dockerfile
+
+  authentication.api:
+    image: ${DOCKER_REGISTRY-}authenticationapi
+    build:
+      context: .
+      dockerfile: Identity/Authentication.API/Dockerfile
+
 volumes:
   mongo_data:
   portainer_data:
@@ -55,6 +67,8 @@ volumes:
   pgadmin_data:
 
    
+
+
 
 
 

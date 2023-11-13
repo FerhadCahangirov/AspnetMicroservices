@@ -1,5 +1,20 @@
 {
   "Routes": [
+    //Authentication Web Api
+
+    {
+      "UpstreamPathTemplate": "api/Account",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "authenticationwebapi",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate":  "/api/Account"
+    },
+
     //Catalog API
     {
       "DownstreamPathTemplate": "/api/v1/Catalog",
@@ -11,7 +26,14 @@
         }
       ],
       "UpstreamPathTemplate": "/Catalog",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ]
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [],
+        "RouteClaimsRequirement": {
+          "Role": "Administrator"
+        }
+      }
     },
     {
       "DownstreamPathTemplate": "/api/v1/Catalog/{id}",
